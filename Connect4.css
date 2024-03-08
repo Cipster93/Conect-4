@@ -1,0 +1,36 @@
+.parent{
+    display: grid;
+    grid-gap: 1px;
+    grid-template-columns: repeat(7, 100px);
+    grid-template-rows: repeat(6, 100px);
+}
+.parent > div {
+    padding: 10px;
+    background-color:white;
+    border-radius: 100px;
+    display: grid;
+    place-items: center;
+    width: 70px;
+    height: 70px;
+}
+.parent > div {
+    font-family: sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+}
+.clicked {
+    background-color: red;
+}
+.Players{
+    font-size: 25px;
+}
+.containerParent{
+    background-color: blue;
+    width: 700px;
+    border-radius: 15px;
+}
+.mainCont{
+    position: absolute;
+    top: 40px;
+    left: 800px;
+}
