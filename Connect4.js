@@ -1,8 +1,16 @@
-const cells = [];
+let cells = [];
 const rows = 6;
 const columns = 7;
 const parentDiv = document.querySelector('.parent');
 let moves = 42;
+let checkLinesWinnerPlayer1 = 0;
+let checkLinesWinnerPlayer2 = 0;
+let checkColumnsWinnerPlayer1 = 0;
+let checkColumnsWinnerPlayer2 = 0;
+let checkAscendingDiagonalsWinnerPlayer1 = 0;
+let checkAscendingDiagonalsWinnerPlayer2 = 0;
+let checkDescendingDiagonalsWinnerPlayer1 = 0;
+let checkDescendingDiagonalsWinnerPlayer2 = 0;
 
 for (let i = 0; i < rows; i++) {
     cells[i] = [];
@@ -16,7 +24,7 @@ for (let i = 0; i < rows; i++) {
 
 for (let i = cells.length - 1; i >= 0; --i) {
     const row = cells[i];
-    for (let j = 0; j < row.length; j++) {
+    for (let j = 0; j < row.length; ++j) {
         let cell = cells[i][j];
         cell.addEventListener('click', function() {
             if (i === cells.length - 1) {
@@ -36,112 +44,110 @@ for (let i = cells.length - 1; i >= 0; --i) {
                     --moves;
                 }
             }
-            checkLinesWinner();
-            checkColumnsWinner();
-            checkAscendingDiagonalsWinner();
-            checkDescendingDiagonalsWinner();
+            checkLines();
+            checkColumns();
+            checkAscendingDiagonals();
+            checkDescendingDiagonals();
         });
     }
 }
 
-function checkLinesWinner() {
+function checkLines() {
     for (let i = 0; i < rows; ++i) {
-        let player1Won = 0;
-        let player2Won = 0;
+        checkLinesWinnerPlayer1 = 0;
+        checkLinesWinnerPlayer2 = 0;
         for (let j = 0; j < columns; ++j) {
             if (cells[i][j].style.backgroundColor === "red") {
-                ++player1Won;
-                player2Won = 0;
+                ++checkLinesWinnerPlayer1;
+                checkLinesWinnerPlayer2 = 0;
             } else {
-                player1Won = 0;
+                checkLinesWinnerPlayer1 = 0;
             }
-            if (player1Won === 4) {
-                alert("Player 1 won");
-                return;
-            }
-
             if (cells[i][j].style.backgroundColor === "yellow") {
-                ++player2Won;
-                player1Won = 0;
+                ++checkLinesWinnerPlayer2;
+                checkLinesWinnerPlayer1 = 0;
             } else {
-                player2Won = 0;
+                checkLinesWinnerPlayer2 = 0;
             }
-            if (player2Won === 4) {
-                alert("Player 2 won");
-                return;
-            }
+            checkWinner();
         }
     }
 }
 
-function checkColumnsWinner() {
+function checkColumns() {
     for (let j = 0; j < columns; ++j) {
-        let player1Won = 0;
-        let player2Won = 0;
+        checkColumnsWinnerPlayer1 = 0;
+        checkColumnsWinnerPlayer2 = 0;
         for (let i = 0; i < rows; ++i) {
             if (cells[i][j].style.backgroundColor === "red") {
-                ++player1Won;
-                player2Won = 0;
+                ++checkColumnsWinnerPlayer1;
+                checkColumnsWinnerPlayer2 = 0;
             } else {
-                player1Won = 0;
+                checkColumnsWinnerPlayer1 = 0;
             }
-            if (player1Won === 4) {
-                alert("Player 1 won");
-                return;
-            }
-
             if (cells[i][j].style.backgroundColor === "yellow") {
-                ++player2Won;
-                player1Won = 0;
+                ++checkColumnsWinnerPlayer2;
+                checkColumnsWinnerPlayer1 = 0;
             } else {
-                player2Won = 0;
+                checkColumnsWinnerPlayer2 = 0;
             }
-            if (player2Won === 4) {
-                alert("Player 2 won");
-                return;
-            }
+            checkWinner();
         }
     }
 }
 
-function checkAscendingDiagonalsWinner() {
+function checkAscendingDiagonals() {
     for (let i = 3; i < rows; ++i) {
         for (let j = 0; j < columns - 3; ++j) {
             if (cells[i][j].style.backgroundColor === "red" &&
                 cells[i - 1][j + 1].style.backgroundColor === "red" &&
                 cells[i - 2][j + 2].style.backgroundColor === "red" &&
                 cells[i - 3][j + 3].style.backgroundColor === "red") {
-                alert("Player 1 won");
-                return;
+                checkAscendingDiagonalsWinnerPlayer1 = 4;
             }
             if (cells[i][j].style.backgroundColor === "yellow" &&
                 cells[i - 1][j + 1].style.backgroundColor === "yellow" &&
                 cells[i - 2][j + 2].style.backgroundColor === "yellow" &&
                 cells[i - 3][j + 3].style.backgroundColor === "yellow") {
-                alert("Player 2 won");
-                return;
+                checkAscendingDiagonalsWinnerPlayer2 = 4;
             }
         }
     }
+    checkWinner();
 }
 
-function checkDescendingDiagonalsWinner() {
+function checkDescendingDiagonals() {
     for (let i = 3; i < rows; ++i) {
         for (let j = 3; j < columns; ++j) {
             if (cells[i][j].style.backgroundColor === "red" &&
                 cells[i - 1][j - 1].style.backgroundColor === "red" &&
                 cells[i - 2][j - 2].style.backgroundColor === "red" &&
                 cells[i - 3][j - 3].style.backgroundColor === "red") {
-                alert("Player 1 won");
-                return;
+                checkDescendingDiagonalsWinnerPlayer1 = 4;
             }
             if (cells[i][j].style.backgroundColor === "yellow" &&
                 cells[i - 1][j - 1].style.backgroundColor === "yellow" &&
                 cells[i - 2][j - 2].style.backgroundColor === "yellow" &&
                 cells[i - 3][j - 3].style.backgroundColor === "yellow") {
-                alert("Player 2 won");
-                return;
+                checkDescendingDiagonalsWinnerPlayer2 = 4;
             }
         }
+    }
+    checkWinner();
+}
+
+function checkWinner() {
+    if (checkLinesWinnerPlayer1 === 4 || checkColumnsWinnerPlayer1 === 4 || checkAscendingDiagonalsWinnerPlayer1 === 4 || checkDescendingDiagonalsWinnerPlayer1 === 4) {
+        document.getElementById("winner").innerText = "Player 1 won!";
+        cells = [0];
+        setTimeout(function() {
+            location.reload();
+        }, 2000);
+    } else if (checkLinesWinnerPlayer2 === 4 || checkColumnsWinnerPlayer2 === 4 || checkAscendingDiagonalsWinnerPlayer2 === 4 || checkDescendingDiagonalsWinnerPlayer2 === 4) {
+        document.getElementById("winner").innerText = "Player 2 won!";
+        cells = [0];
+        setTimeout(function() {
+            location.reload();
+        }, 2000);
     }
 }
